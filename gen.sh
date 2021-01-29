@@ -10,13 +10,13 @@ cd graph_1
 for (( c=$START; c<=$END; c++ ))
 do
 	let x=$c+1
-	echo 12 $x >>inp$c.txt
+	echo 17 $x >>inp$c.txt
 done
 cd ..
 cd graph_2
 for (( c=$START; c<=$END; c++ ))
 do
-	let x=$c+10
+	let x=$c+12
 	echo $x 5 >>inp$c.txt
 done
 cd $CURR_DIR

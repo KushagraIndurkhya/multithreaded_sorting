@@ -11,6 +11,7 @@ typedef struct data
 	int* thread_dead;
 
 	int arr_len;
+	int len;
 	int no_of_threads;
 	
 	int start;
@@ -51,7 +52,7 @@ void fill_arr(int*arr,int n)
 		arr[i]=rand()%100;
 }
 
-void merge_segments(int a,int b,int c,int d,int* arr,int len)
+void merge(int a,int b,int c,int d,int* arr,int len)
 {
 	int temp[d-a+1];
 	int i=a,j=c,k=0;
@@ -70,22 +71,14 @@ void merge_segments(int a,int b,int c,int d,int* arr,int len)
 		arr[i]=temp[j++];
 }
 
-void sort_segment(int*arr,int start,int seg_size)
+void sort(int*arr,int l,int r,int len)
 {
-	int min,temp;
-	for(int i=start;i<start+seg_size;i++)
-	{
-		min=i;
-		for (int j = i; j<start+seg_size;j++)
-			if (arr[j]<=arr[min])
-				min=j;
-		if (min!=i)
-		{
-			temp=arr[i];
-			arr[i]=arr[min];
-			arr[min]=temp;
-		}
-	}
+	if(l>=r)
+		return;
+	int m = (l+r-1)/2;
+	sort(arr,l,m,len);
+    sort(arr,m+1,r,len);
+    merge(l,m,m+1,r,arr,len);
 
 }
 
@@ -96,8 +89,9 @@ void* sort_thread(void* seg_start)
 	int* arr=data->arr;
 	int start=data->start;
 	int seg_size=data->seg;
+	int len=data->len;
 	// Sorting the segment
-	sort_segment(arr,start,seg_size);
+	sort(arr,start,start+seg_size-1,len);
 }
 void* merge_thread(void* shared_data)
 {
@@ -113,7 +107,7 @@ void* merge_thread(void* shared_data)
 	int c=b+1;
 	int d=c+(phase*seg_size)-1;
 
-	merge_segments(a,b,c,d,arr,len);
+	merge(a,b,c,d,arr,len);
 
 	pthread_exit(NULL);
 }
@@ -144,6 +138,8 @@ int main()
 		shared_data[i].arr=&arr[0];
 		shared_data[i].start=i*seg_size;
 		shared_data[i].seg=seg_size;
+		shared_data[i].len=len;
+
 	}
 
 	clock_t start_time=clock();
