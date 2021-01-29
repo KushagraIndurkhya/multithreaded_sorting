@@ -4,9 +4,10 @@ green=`tput setaf 2`
 reset=`tput sgr0`
 START=1
 END=5
-gcc sol1.c -pthread -o 1.out
-gcc sol2.c -pthread -o 2.out
-gcc sol3.c -pthread -o 3.out
+cd .scripts
+gcc ./../solutions/sol1.c -pthread -o 1.out
+gcc ./../solutions/sol2.c -pthread -o 2.out
+gcc ./../solutions/sol3.c -pthread -o 3.out
 ./gen.sh
 function colorize()
 {
@@ -42,21 +43,35 @@ do
 					echo $j > time$i.txt
 				fi
 			done
-		done	
+		done
+	for (( i=1; i<=3; i++ ))
+	do
+	echo $(cat time$i.txt | grep -o '[0-9]*'|head -1) >> $1.$i.txt
+	done	
 	echo "($(cat ./test/$1/inp$c.txt))	$(cat time1.txt | grep -o '[0-9]*'|head -1)	$(colorize $(cat res1.txt))	$(cat time2.txt|grep -m 1 -o '[0-9]*'|head -1)	$(colorize $(cat res2.txt))	$(cat time3.txt|grep -m 1 -o '[0-9]*'|head -1)	$(colorize $(cat res3.txt))"
 done
 }
 echo "				Graph-1		"
-echo "(n p)		SOl-1			SOL-2			SOL-3"
+echo "(n p)	SOl-1			SOL-2			SOL-3"
 graph_val "graph_1"
 echo "				Graph-2		"
-echo "(n p)		SOl-1			SOL-2			SOL-3"
+echo "(n p)	SOl-1			SOL-2			SOL-3"
 graph_val "graph_2"
+
+
+( for (( i=1; i<=2; i++ ))
+	do
+		for (( j=1; j<=3; j++ ))
+			do
+				echo  "graph_$i.$j.txt"
+			done
+	done )|python.exe ./visualize.py
 rm *.out
 rm res*.txt
 rm time*.txt
+rm graph_*.txt
 rm -r test
-
-echo
+cd ..
+echo "Exiting"
 
 
