@@ -3,12 +3,14 @@ red=`tput setaf 1`
 green=`tput setaf 2`
 reset=`tput sgr0`
 START=1
-END=5
+END=6
 cd .scripts
 gcc ./../solutions/sol1.c -pthread -o 1.out
 gcc ./../solutions/sol2.c -pthread -o 2.out
 gcc ./../solutions/sol3.c -pthread -o 3.out
+/usr/bin/printf "${green}\xE2\x9C\x94 Compiled${reset}"
 ./gen.sh
+/usr/bin/printf "${green}\xE2\x9C\x94 Inputs Generated\n${reset}"
 function colorize()
 {
 	if [ $1 = "SORTED" ]
@@ -57,7 +59,7 @@ graph_val "graph_1"
 echo "				Graph-2		"
 echo "(n p)	SOl-1			SOL-2			SOL-3"
 graph_val "graph_2"
-
+/usr/bin/printf "${green}\xE2\x9C\x94 Graphs Plotted\n${reset}"
 
 ( for (( i=1; i<=2; i++ ))
 	do
@@ -72,6 +74,7 @@ rm time*.txt
 rm graph_*.txt
 rm -r test
 cd ..
-echo "Exiting"
+/usr/bin/printf "${green}\xE2\x9C\x94 Cleanup \n${reset}"
+echo "${red}Script Exited${reset}"
 
 

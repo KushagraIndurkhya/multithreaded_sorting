@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-x1= [2,3,4,5,6]
-x2= [13,14,15,16,17]
+x1= [i for i in range(2,8)]
+x2= [i for i in range(13,19)]
 y1=[]
 y2=[]
 file_names=[]
@@ -42,5 +42,6 @@ plt.ylabel('Time in microseconds')
 plt.xticks(np.arange(min(x2), max(x2)+1, 1.0))
 plt.title("Graph-2")
 plt.grid(True)
+
 plt.legend()
 plt.show()
