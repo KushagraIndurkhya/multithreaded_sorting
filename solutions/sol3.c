@@ -81,7 +81,6 @@ void check_sorted(long int*arr,int len)
  *   b: end index of subarray-1
  * 	 c:	start index of subarray-2
  *   d:	start index of subarray-2 
-
  *  
  *
  *   returns: Void

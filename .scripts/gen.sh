@@ -5,9 +5,9 @@ cd test
 mkdir graph_1
 mkdir graph_2
 cd graph_1
-for (( c=2,i=1; c<8; c++,i++ ))
+for (( c=1,i=1; c<7; c++,i++ ))
 do
-	echo 18 $c >>inp$i.txt
+	echo 14 $c >>inp$i.txt
 done
 cd ..
 cd graph_2

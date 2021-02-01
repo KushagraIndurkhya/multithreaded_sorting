@@ -1,16 +1,22 @@
+/*
+* Assignment-1 Solution-1
+* Submitted by: Kushagra Indurkhya
+* Roll No: CS19B1017
+*/ 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
 #include <time.h>
-
-
+// ***Structs***
+/* Struct to hold data shared 
+to slave thread for sorting a segment */
 typedef struct data{
 	long int* arr;
 	int start;
 	int seg;
-	int len;
 }share;
-
+// ***Utillity functions***
 /*
  * Function:  expo
  * --------------------
@@ -63,7 +69,7 @@ void fill_arr(long int*arr,int n)
  * ----------------------------
  *   checks if the array is sorted
  *
- *   *arr:pointer of array to be filled 
+ *   *arr:pointer of array to be checked
  *   n2: length of the array
  *
  *   returns:Void
@@ -136,6 +142,7 @@ void sort(long int*arr,int l,int r)
     merge(l,m,m+1,r,arr);
 
 }
+// ***Thread Function***
 /*
  * Function: sort_seg
  * ----------------------------
@@ -152,53 +159,54 @@ void* sort_seg(void* seg_start)
 	int start=data->start;
 	long int* arr=data->arr;
 	int seg_size=data->seg;
-	// int len=data->len;
 
 	sort(arr,start,start+seg_size-1);
 	pthread_exit(NULL);	
 
 }
-
+// ***Main Function***
 int main()
 {
+	//taking input of n,p
 	int n,p;
 	scanf("%d %d",&n,&p);
+
+	//calculating the length of array
 	int len=expo(n);
+	
+	//declaring and filling the array of long ints
 	long int arr[len];
-
 	fill_arr(&arr[0],len);
-	// print_arr(&arr[0],len);
+	// print_arr(&arr[0],len);//Printing array before sorting
 
-	clock_t start_time=clock();
+	clock_t start_time=clock();//starting the clock
 
 	int no_of_threads=expo(p);
 	int seg_size=expo(n-p);
 	pthread_t thread_ids[no_of_threads];
-
 	share shared_data[no_of_threads];
+	// filling shared_data array with data to be shared with the coressponding thread
 	for (int i = 0; i < no_of_threads; i++)
 	{
 		shared_data[i].arr=&arr[0];
 		shared_data[i].start=i*seg_size;
 		shared_data[i].seg=seg_size;
-		shared_data[i].len=len;
 
 	}
-	
+	// Sorting the segments in multi threaded manner
 	for (int i = 0; i < no_of_threads; ++i)
-		pthread_create(&thread_ids[i],NULL,sort_seg,(void*)&shared_data[i]);	
-
+		pthread_create(&thread_ids[i],NULL,sort_seg,(void*)&shared_data[i]);
+	// Waiting for all threads to terminate
 	for (int i = 0; i < no_of_threads; i++)
 		pthread_join(thread_ids[i], NULL);
-
+	//merging the sorted segments sequentially in main thread
 	for (int i = 1; i < no_of_threads; i++)
 		merge(0,(i*seg_size)-1,i*seg_size,(i*seg_size)-1+seg_size,&arr[0]);
-	clock_t end_time=clock();
-	// print_arr(&arr[0],len);
+	clock_t end_time=clock();//stopping the clock
+	// print_arr(&arr[0],len); //Printing array after sorting
 	printf("Time taken:%f Microseconds\n",((((double)end_time-start_time)/CLOCKS_PER_SEC)*1000000));
 
 	check_sorted(arr,len);
 
 	return 0;
 }
-

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-x1= [i for i in range(2,8)]
+x1= [i for i in range(1,7)]
 x2= [i for i in range(13,19)]
 y1=[]
 y2=[]
